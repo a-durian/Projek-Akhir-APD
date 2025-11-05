@@ -1,2 +1,7 @@
-test = ("Ngetest github collab dulu euy [04/11/2025]")
+import subprocess
+
+subprocess.run(["python", "Jam_Digital.py"])
+
+test = "Ngetest github collab dulu euy [04/11/2025]"
 print(test)
+
