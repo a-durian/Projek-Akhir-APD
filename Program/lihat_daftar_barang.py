@@ -17,4 +17,5 @@ def listProduk():
     print(tabel)
 
 
-listProduk()
+if __name__ == "__main__":
+    listProduk()
