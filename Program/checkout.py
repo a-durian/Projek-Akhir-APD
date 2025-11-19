@@ -2,7 +2,9 @@ import questionary as qs
 from  prettytable import PrettyTable
 from datetime import datetime, timedelta, timezone as timedate
 import random
-from main import keranjang_belanja, daftar_barang, riwayat_transaksi
+# Untuk menghindari circular imports.
+# import: (keranjang_belanja, daftar_barang, riwayat_transaksi)
+# dipindahkan didalam fungsi yang akan berjalan hanya ketika dibutuhkan.
 
 def menu_Keranjang():
     pilihan = qs.select(
@@ -40,6 +42,9 @@ def daftar_Keranjang_Belanja():
     print("")
     tabel_keranjang.align["Nama Produk"] = "l"
     tabel_keranjang.align["Subtotal"] = "l"
+    # import shared data lazily
+    from main import keranjang_belanja, daftar_barang
+
     if not keranjang_belanja:
         print("Keranjang belanja kosong.")
         # kembaliKeMenu(menuCustomer)
@@ -59,6 +64,9 @@ def daftar_Keranjang_Belanja():
         
 def Lanjut_Pembayaran():
     # kalau tidak ada produk di keranjang belanja
+    # import shared state lazily
+    from main import keranjang_belanja, riwayat_transaksi
+
     try:
         not keranjang_belanja
     except ValueError:
@@ -96,6 +104,8 @@ def hapus_Produk_Keranjang():
     # DEKLARASI tabelHapus_dariKeranjang
     tabelHapus_dariKeranjang = PrettyTable()
     print("\nHapus produk dari keranjang belanja...\n")
+    from main import keranjang_belanja, daftar_barang
+
     if not keranjang_belanja:  # Cek apakah keranjang belanja kosong
         print("Keranjang belanja kosong.")
         # kembaliKeMenu(menuCustomer) #kembali ke menu user

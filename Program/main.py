@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
-import os, random
 from register_akun import register
 
-# from admin import tambah, hapus, kelola, lihat_data, update, diskon
-from user import history, pembelian, status
+# untuk menghindari circular imports.
+# importnya dipindahin ke baris dan program yg membtuhkan importnya (Lazy Imports)
 import questionary as qs
 
 history_pesanan = {}
@@ -41,8 +40,11 @@ if __name__ == "__main__":
                         "Selamat Datang Di Toko Kami '-' ",
                         ["Pesan Barang", "Status Pesanan", "History Pesanan", "Keluar"],
                     ).ask()
+
                     match pilihan:
                         case "Pesan Barang":
+                            # import pembelian disini untuk menghindari circular import
+                            from tambah_ke_keranjang import Tambah_Barang_ke_Keranjang as pembelian
                             pembelian(
                                 daftar_pesanan,
                                 daftar_barang,
@@ -53,6 +55,7 @@ if __name__ == "__main__":
                             continue
 
                         case "Status Pesanan":
+                            from status_pesanan import status
                             status(
                                 daftar_pesanan,
                                 waktu_sampai,
@@ -62,6 +65,7 @@ if __name__ == "__main__":
                             continue
 
                         case "History Pesanan":
+                            from history_pembelian import history
                             history(history_pesanan)
                             continue
 
