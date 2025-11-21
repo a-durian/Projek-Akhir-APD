@@ -5,49 +5,56 @@ import sys
 
 # Fungsi Register Yang Mengambilakan Nilai berupa hak user dan username
 # Selain itu Keluar dari Program
-def register(penyimpanan_akun: dict) -> dict:
+def register(penyimpanan_akun, keranjang_belanja, riwayat_transaksi, history_pesanan):
     while True:
-        hitung = 1
-        print(penyimpanan_akun)
         pilihan = qs.select("", ["Register", "Login", "Keluar"]).ask()
         match pilihan:
 
             case "Register":
                 username = input("Input Username : ")
-                password = input("Input Password : ")
+                password = qs.password("Input Password : ").ask()
                 if password == "" or username == "":
                     clear_terminal()
                     print("Password atau Username Tidak Boleh Kosong")
                     continue
-                for i in penyimpanan_akun.values():
-                    if username == i["username"]:
-                        clear_terminal()
-                        print("Username Telah Digunakan")
-                        break
-                    elif username != i["username"] and hitung == len(penyimpanan_akun):
-                        banyak_akun = len(penyimpanan_akun)
-                        penyimpanan_akun[banyak_akun + 1] = {
-                            "username": username,
-                            "password": password,
-                            "hak": "user",
-                        }
-                        print("Akun Berhasil Di Buat")
-                        break
+                username_akun = [i["username"] for i in penyimpanan_akun.values()]
+                if username in username_akun:
+                    clear_terminal()
+                    print("Username Telah Digunakan")
+                    continue
+                elif not (username in username_akun):
+
+                    banyak_akun = len(penyimpanan_akun.values()) + 1
+                    penyimpanan_akun[banyak_akun] = {
+                        "username": username,
+                        "password": password,
+                        "hak": "user",
+                    }
+                    keranjang_belanja[username] = {}
+                    riwayat_transaksi[username] = {}
+                    history_pesanan[username] = {}
+                    print("Akun Berhasil Di Buat")
+                    continue
 
             case "Login":
                 username = input("Input Username : ")
                 password = input("Input Password : ")
-                for i in penyimpanan_akun.values():
-                    if i["username"] == username and i["password"] == password:
-                        if i["hak"] == "admin":
-                            return [i["username"], i["hak"]]
-                        elif i["hak"] == "user":
-                            return [i["username"], i["hak"]]
-                        else:
-                            return "Keluar"
-                    elif i["username"] != username and i["password"] != password and hitung == len(penyimpanan_akun):
-                        print("Username Atau Password Salah")
-                    else:
-                        print("Akun Belum Di Buat")
+                for id, akun in penyimpanan_akun.items():
+                    for a in akun:
+                        if (
+                            akun["username"] == username
+                            and akun["password"] == password
+                        ):
+                            if akun["hak"] == "admin":
+                                return [akun["username"], akun["hak"]]
+                            elif akun["hak"] == "user":
+                                return [akun["username"], akun["hak"]]
+                            else:
+                                return "Keluar"
+                        elif (
+                            akun["username"] != username or akun["password"] != password
+                        ):
+                            print("Username atau Password Salah")
+                            break
             case "Keluar":
                 sys.exit()

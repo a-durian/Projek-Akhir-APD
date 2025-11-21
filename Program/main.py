@@ -1,35 +1,22 @@
 from datetime import datetime, timedelta
 from register_akun import register
-
-# untuk menghindari circular imports.
-# importnya dipindahin ke baris dan program yg membtuhkan importnya (Lazy Imports)
 import questionary as qs
-
-history_pesanan = {}
-akun = {"admin": ["admin123", "admin"]}
-daftar_pesanan = {}
-daftar_barang = {
-     1: {"nama": "Roti Tawar", "harga": 12000},
-     2: {"nama": "Konohamie Mi Instan Goreng", "harga": 3200},
-     3: {"nama": "Konohamie Mi Instan Kari Ayam", "harga": 3200},
-     4: {"nama": "Geng-Geng Wafer Chocolate", "harga": 9900},
-     5: {"nama": "Silver King", "harga": 25000},
-     6: {"nama": "Lolari Sweat", "harga": 8000},
-     7: {"nama": "Bad Day", "harga": 13000},
-     8: {"nama": "Konohamilk", "harga": 14000},
-     9: {"nama": "Youzone", "harga": 16000},
-     10: {"nama": "Beras 5KG", "harga": 77000}
-} #nomor..: {nama:, harga:}
-keranjang_belanja = {}
-riwayat_transaksi = {}
-waktu_pembelian = []
-waktu_sampai = []
+from variabel_global import (
+    history_pesanan,
+    akun,
+    daftar_barang,
+    keranjang_belanja,
+    riwayat_transaksi,
+)
 
 if __name__ == "__main__":
     while True:
         # regist
-        username = register(akun)
-        hak_akun = akun[username][1]
+        hak_username = register(
+            akun, keranjang_belanja, riwayat_transaksi, history_pesanan
+        )
+        hak_akun = hak_username[1]
+        username = hak_username[0]
 
         match hak_akun:
 
@@ -38,35 +25,30 @@ if __name__ == "__main__":
                 while True:
                     pilihan = qs.select(
                         "Selamat Datang Di Toko Kami '-' ",
-                        ["Pesan Barang", "Status Pesanan", "History Pesanan", "Keluar"],
+                        [
+                            "Keranjang Belanja",
+                            "Status Pesanan",
+                            "History Pesanan",
+                            "Keluar",
+                        ],
                     ).ask()
-
                     match pilihan:
-                        case "Pesan Barang":
-                            # import pembelian disini untuk menghindari circular import
-                            from tambah_ke_keranjang import Tambah_Barang_ke_Keranjang as pembelian
-                            pembelian(
-                                daftar_pesanan,
-                                daftar_barang,
-                                waktu_pembelian,
-                                waktu_sampai,
-                                username,
-                            )
+                        case "Keranjang Belanja":
+                            from checkout import menu_Keranjang
+
+                            menu_Keranjang(username)
                             continue
 
                         case "Status Pesanan":
                             from status_pesanan import status
-                            status(
-                                daftar_pesanan,
-                                waktu_sampai,
-                                waktu_pembelian,
-                                history_pesanan,
-                            )
+
+                            status(riwayat_transaksi, history_pesanan, username)
                             continue
 
                         case "History Pesanan":
                             from history_pembelian import history
-                            history(history_pesanan)
+
+                            history(history_pesanan, username)
                             continue
 
                         case "Keluar":
@@ -86,5 +68,3 @@ if __name__ == "__main__":
                             "Kelola Akun User",
                         ],
                     ).ask()
-            case "Keluar":
-                break
