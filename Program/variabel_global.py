@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+diskon = 1
 history_pesanan = {"a": {}}
 akun = {
     1: {"username": "admin", "password": "admin123", "hak": "admin"},

@@ -3,14 +3,15 @@ from datetime import datetime, timedelta
 from copy import deepcopy
 from fungsi import clear_terminal
 import pandas as pd
+import variabel_global as var
 
 
-def status(riwayat, history_pesanan, username):
-    if riwayat[username]:
+def status(username):
+    if var.riwayat_transaksi[username]:
         # Tampilkan Status Pesanan
         print("Berikut Daftar Status Pesanan Mu")
-        salinan_riwayat = deepcopy(riwayat)
-        for no, i in enumerate(riwayat[username].values(), start=1):
+        salinan_riwayat = deepcopy(var.riwayat_transaksi)
+        for no, i in enumerate(var.riwayat_transaksi[username].values(), start=1):
             tabel_status = PrettyTable()
             total = 0
             tabel_status.field_names = ["No", "Nama Produk", "Harga", "Jumlah"]
@@ -22,15 +23,19 @@ def status(riwayat, history_pesanan, username):
             tabel_status.add_row(["", "", "", ""])
             tabel_status.add_row(["", "", "Total", total])
             print(tabel_status)
+
             # cek pengiriman sudah sampai atau belum
             if i["waktu_estimasi"] <= datetime.now():
+                # barang sudah sampai akan  di hapus dari status Pesanan
                 print("Barang Pesanan Mu Sudah Sampai \n")
-                history_pesanan[username][len(history_pesanan[username]) + 1] = (
-                    salinan_riwayat[username].pop(no)
-                )
+                var.history_pesanan[username][
+                    len(var.history_pesanan[username]) + 1
+                ] = salinan_riwayat[username].pop(no)
 
                 # menambah data barang yang telah sampai ke data pemasukan
-                for id, pesanan in enumerate(riwayat[username].values(), start=1):
+                for id, pesanan in enumerate(
+                    var.riwayat_transaksi[username].values(), start=1
+                ):
                     for barang in pesanan["barang"].values():
                         data_baru = {
                             "Tanggal": [pesanan["waktu_estimasi"]],
@@ -38,7 +43,6 @@ def status(riwayat, history_pesanan, username):
                             "Harga": [barang["harga"]],
                             "Jumlah": [barang["jumlah"]],
                         }
-                        print(data_baru)
                     df_baru = pd.DataFrame(data_baru)
                     df_baru.to_csv(
                         "data_pemasukan.csv", mode="a", header=False, index=False
@@ -46,7 +50,7 @@ def status(riwayat, history_pesanan, username):
 
             else:
                 print("Barang Pesanan Mu Belum Sampai \n")
-            riwayat[username] = deepcopy(salinan_riwayat[username])
+            var.riwayat_transaksi[username] = deepcopy(salinan_riwayat[username])
     else:
         clear_terminal()
         print("Maaf Belum Ada Daftar Pesanan Mu")

@@ -1,7 +1,9 @@
-import csv
 from prettytable import PrettyTable
+import pandas as pd
+import csv
 
 NAMA_FILE_PEMASUKAN = "data_pemasukan.csv"
+
 
 def list_data_pemasukan():
     try:
@@ -21,3 +23,7 @@ def list_data_pemasukan():
 
     except FileNotFoundError:
         print("Belum ada data pemasukan.")
+
+
+list_data_pemasukan()
+

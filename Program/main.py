@@ -1,22 +1,34 @@
 from datetime import datetime, timedelta
+from status_pesanan import status
 from register_akun import register
+from tambah_produk import tambah_barang
+from lihat_daftar_barang import listProduk
+from update_produk import update_barang
+from hapus_produk import hapusProduk
+from checkout import menu_Keranjang
+from history_pembelian import history
+from tambah_diskon import diskon
+from fungsi import clear_terminal
+import time
 import questionary as qs
-from variabel_global import (
-    history_pesanan,
-    akun,
-    daftar_barang,
-    keranjang_belanja,
-    riwayat_transaksi,
-)
+import variabel_global as var
 
 if __name__ == "__main__":
     while True:
+        # animasi loading
+        loading = ["l", "o", "a", "d", "i", "n", "g"]
+        batas = 0
+        while batas <= 3:
+            for i in loading:
+                print(f"{i}", end="", flush=True)
+                time.sleep(0.1)
+            clear_terminal()
+            batas += 1
+
         # regist
-        hak_username = register(
-            akun, keranjang_belanja, riwayat_transaksi, history_pesanan
-        )
-        hak_akun = hak_username[1]
-        username = hak_username[0]
+        reg = register()
+        hak_akun = reg[1]
+        username = reg[0]
 
         match hak_akun:
 
@@ -34,21 +46,15 @@ if __name__ == "__main__":
                     ).ask()
                     match pilihan:
                         case "Keranjang Belanja":
-                            from checkout import menu_Keranjang
-
                             menu_Keranjang(username)
                             continue
 
                         case "Status Pesanan":
-                            from status_pesanan import status
-
-                            status(riwayat_transaksi, history_pesanan, username)
+                            status(username)
                             continue
 
                         case "History Pesanan":
-                            from history_pembelian import history
-
-                            history(history_pesanan, username)
+                            history(username)
                             continue
 
                         case "Keluar":
@@ -66,5 +72,23 @@ if __name__ == "__main__":
                             "Tampilkan Data Penjualan",
                             "Tambahkan Diskon Barang",
                             "Kelola Akun User",
+                            "Keluar",
                         ],
                     ).ask()
+                    match pilihan:
+                        case "Tambah Daftar Barang":
+                            tambah_barang()
+                        case "Tampilkan Daftar Barang":
+                            listProduk()
+                        case "Update Daftar Barang":
+                            update_barang()
+                        case "Hapus Daftar Barang":
+                            hapusProduk()
+                        case "Tampilkan Data Penjualan":
+                            pass
+                        case "Tambahkan Diskon Barang":
+                            diskon()
+                        case "Kelola Akun User":
+                            pass
+                        case "Keluar":
+                            break
