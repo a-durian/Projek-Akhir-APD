@@ -38,7 +38,8 @@ def Tambah_Barang_ke_Keranjang(username):
                     len(var.keranjang_belanja[username]) + 1
                 ] = {
                     "nama": var.daftar_barang[menu_grosir]["nama"],
-                    "harga": var.daftar_barang[menu_grosir]["harga"],
+                    "harga": var.daftar_barang[menu_grosir]["harga"]
+                    - (var.daftar_barang[menu_grosir]["harga"] * var.diskon),
                     "jumlah": jumlah,
                 }
 
