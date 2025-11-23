@@ -3,7 +3,7 @@ import variabel_global as var
 
 
 def history(username):
-    if var.history_pembelian:
+    if var.history_pesanan:
         tabel_history = PrettyTable()
         total = 0
         tabel_history.field_names = ["No", "Nama Produk", "Harga", "Jumlah"]

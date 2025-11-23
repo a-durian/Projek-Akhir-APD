@@ -9,21 +9,23 @@ from checkout import menu_Keranjang
 from history_pembelian import history
 from tambah_diskon import diskon
 from fungsi import clear_terminal
+from kelola_user import Kelola_user
 import time
 import questionary as qs
 import variabel_global as var
 
 if __name__ == "__main__":
+    # animasi loading
+    loading = ["l", "o", "a", "d", "i", "n", "g"]
+    batas = 0
+    while batas <= 3:
+        for i in loading:
+            print(f"{i}", end="", flush=True)
+            time.sleep(0.1)
+        clear_terminal()
+        batas += 1
+
     while True:
-        # animasi loading
-        loading = ["l", "o", "a", "d", "i", "n", "g"]
-        batas = 0
-        while batas <= 3:
-            for i in loading:
-                print(f"{i}", end="", flush=True)
-                time.sleep(0.1)
-            clear_terminal()
-            batas += 1
 
         # regist
         reg = register()
@@ -31,12 +33,13 @@ if __name__ == "__main__":
         username = reg[0]
 
         match hak_akun:
-
             # user program
             case "user":
                 while True:
+                    if var.diskon > 0:
+                        print(f"Hari Ini DISKONNN {int(var.diskon*100)}%")
                     pilihan = qs.select(
-                        "Selamat Datang Di Toko Kami '-' ",
+                        f"Halo {username} Selamat Datang Di Toko Kami '-' ",
                         [
                             "Keranjang Belanja",
                             "Status Pesanan",
@@ -89,6 +92,6 @@ if __name__ == "__main__":
                         case "Tambahkan Diskon Barang":
                             diskon()
                         case "Kelola Akun User":
-                            pass
+                            Kelola_user()
                         case "Keluar":
                             break
