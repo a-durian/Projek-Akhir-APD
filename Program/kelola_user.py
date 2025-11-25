@@ -36,17 +36,17 @@ def tambah_akun():
         print("Password atau Username Tidak Boleh Kosong")
         return
 
-    daftar_var.akun = [i["username"] for i in var.akun.values()]
-    if username in daftar_var.akun:
+    daftar_akun = [i["username"] for i in var.akun.values()]
+    if username in daftar_akun:
         clear_terminal()
         print("Username Sudah Ada")
         return
 
-    elif not (username in daftar_var.akun):
+    elif not (username in daftar_akun):
         hak = qs.select("Hak Akses:", choices=["admin", "user"]).ask()
 
-        var.akun_baru = max(var.akun.keys()) + 1 if var.akun else 1
-        var.akun[var.akun_baru] = {
+        akun_baru = max(var.akun.keys()) + 1 if var.akun else 1
+        var.akun[akun_baru] = {
             "username": username,
             "password": password,
             "hak": hak,
@@ -121,4 +121,3 @@ def hapus_akun():
     if konfirmasi:
         del var.akun[idAkun]
         print("\nAkun berhasil dihapus!\n")
-
