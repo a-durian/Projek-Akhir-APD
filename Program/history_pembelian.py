@@ -11,10 +11,10 @@ def history(username):
         for id in var.history_pesanan[username].values():
             for idbarang, barang in id["barang"].items():
                 tabel_history.add_row(
-                    [idbarang, barang["nama"], barang["harga"], barang["jumlah"]]
+                    [idbarang, barang["nama"], barang["jumlah"], f"Rp.{barang["harga"]:,}"]
                 )
                 total += barang["harga"]
-            tabel_history.add_row(["", "", "Total", total])
+            tabel_history.add_row(["", "", "Total", f"Rp.{total:,}"])
             print(tabel_history)
             print(f"Pesanan Telah Diterima pada {id["waktu_estimasi"]}\n")
             tabel_history.clear_rows()
