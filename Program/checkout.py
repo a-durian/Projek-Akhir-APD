@@ -7,7 +7,10 @@ from fungsi import clear_terminal
 from colorama import init, Fore, Style
 from lihat_daftar_barang import listProduk
 
-init(autoreset=True)# >>Untuk menghindari overwrite data lama terhadap data baru, import variabel_global, jangan pakai from variabel_global karena hanya akan menjadi referensi bukan merujuk ke variabel asli
+init(
+    autoreset=True
+)  # >>Untuk menghindari overwrite data lama terhadap data baru, import variabel_global, jangan pakai from variabel_global karena hanya akan menjadi referensi bukan merujuk ke variabel asli
+
 
 def menu_Keranjang(username):
     pilihan = qs.select(
@@ -37,9 +40,12 @@ def menu_Keranjang(username):
         case "Kembali ke Menu Utama User":
             sys.exit()
 
+
 def daftar_Keranjang_Belanja(username):
     if var.keranjang_belanja[username]:
-        tabel_keranjang = PrettyTable() # deklarasi tabel_keranjang sebagai objek PrettyTable
+        tabel_keranjang = (
+            PrettyTable()
+        )  # deklarasi tabel_keranjang sebagai objek PrettyTable
         tabel_keranjang.set_style(TableStyle.SINGLE_BORDER)
         tabel_keranjang.field_names = ["No", "Nama Produk", "Jumlah", "Subtotal"]
         print("")
@@ -61,6 +67,7 @@ def daftar_Keranjang_Belanja(username):
     else:
         print("\n!! Belum Ada Produk Di Keranjang Belanja !!\n")
         # kembali ke menu sebelumnya
+
 
 def Lanjut_Pembayaran(username):
     if var.keranjang_belanja[username]:
@@ -88,6 +95,7 @@ def Lanjut_Pembayaran(username):
             return Lanjut_Pembayaran(username)
     else:
         print("\n!! Belum Ada Produk Di Keranjang Belanja !!\n")
+
 
 def Tambah_Barang_ke_Keranjang(username):
     if var.daftar_barang:
@@ -154,8 +162,10 @@ def Tambah_Barang_ke_Keranjang(username):
     else:
         print("\n! Belum Ada Produk !\n")
 
+
 if __name__ == "__main__":
     pass
+
 
 def hapus_Produk_Keranjang(username):
     if var.keranjang_belanja[username]:
@@ -166,12 +176,14 @@ def hapus_Produk_Keranjang(username):
         if (
             pilihan_hapus.isdigit()
             and int(pilihan_hapus) >= 1
-            or int(pilihan_hapus) <= key_akhir
+            and int(pilihan_hapus) <= key_akhir
         ):
-            for id, barang in var.keranjang_belanja[username].items():
-                for i in range(int(pilihan_hapus), key_akhir):
-                    salinan_keranjang_belanja[username][i] = barang
-                del salinan_keranjang_belanja[username][key_akhir]
+            for id in range(int(pilihan_hapus), key_akhir):
+                if id < key_akhir:
+                    salinan_keranjang_belanja[username][id] = salinan_keranjang_belanja[
+                        username
+                    ][id + 1]
+            del salinan_keranjang_belanja[username][key_akhir]
             var.keranjang_belanja[username] = deepcopy(
                 salinan_keranjang_belanja[username]
             )
@@ -181,3 +193,4 @@ def hapus_Produk_Keranjang(username):
     else:
         print("\n ! Keranjang Belanja Mu Masih Kosong !\n")
         return
+
