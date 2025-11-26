@@ -20,4 +20,4 @@ def history(username):
             tabel_history.clear_rows()
 
     else:
-        print("Kamu Belum Pernah Memesan Barang")
+        print("\n! Kamu Belum Pernah Memesan Barang !\n")

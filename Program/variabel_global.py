@@ -3,7 +3,11 @@ diskon = 0.05
 history_pesanan = {"a": {}}
 akun = {
     1: {"username": "admin", "password": "admin123", "hak": "admin"},
-    2: {"username": "a", "password": "a", "hak": "user"},
+    3: {"username": "Akbar", "password": "2509106028", "hak": "admin"},
+    2: {"username": "Adrian", "password": "2509106032", "hak": "admin"},
+    4: {"username": "Angga", "password": "2509106036", "hak": "admin"},
+    5: {"username": "Setri", "password": "2509106039", "hak": "admin"},
+    6: {"username": "a", "password": "a123", "hak": "user"},
 }
 daftar_barang = {
     1: {"nama": "Roti Tawar", "harga": 12000, "stock": 2},

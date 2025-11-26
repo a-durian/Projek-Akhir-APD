@@ -41,4 +41,4 @@ def list_data_pemasukan():
             print("\n=== Daftar Data Pemasukan ===")
             print(table)
     except FileNotFoundError:
-        print("Belum ada data pemasukan.")
+        print("\n! Belum ada data pemasukan !\n")

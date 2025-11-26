@@ -33,13 +33,13 @@ def tambah_akun():
 
     if password == "" or username == "":
         clear_terminal()
-        print("Password atau Username Tidak Boleh Kosong")
+        print("\n !! Password atau Username Tidak Boleh Kosong !!\n")
         return
 
     daftar_akun = [i["username"] for i in var.akun.values()]
     if username in daftar_akun:
         clear_terminal()
-        print("Username Sudah Ada")
+        print("\n !! Username Sudah Ada !!\n")
         return
 
     elif not (username in daftar_akun):
@@ -52,14 +52,14 @@ def tambah_akun():
             "hak": hak,
         }
 
-        print(f"\nAkun '{username}' berhasil ditambahkan!\n")
+        print(f"\n+ Akun '{username}' berhasil ditambahkan!\n")
 
 
 # ================= LIHAT =================
 def lihat_akun():
     print("\nDAFTAR AKUN")
     if not var.akun:
-        print("Belum ada akun.\n")
+        print("\n! Belum ada akun !\n")
         return
 
     for idAkun, data in var.akun.items():
@@ -70,7 +70,7 @@ def lihat_akun():
 # ================= UBAH =================
 def ubah_akun():
     if not var.akun:
-        print("\nTidak ada akun.\n")
+        print("\n! Belum ada akun !\n")
         return
 
     pilihan = qs.select(
@@ -96,13 +96,13 @@ def ubah_akun():
         "hak": hak_baru,
     }
 
-    print("\nAkun berhasil diperbarui!")
+    print("\n+ Akun berhasil diperbarui!\n")
 
 
 # ================= HAPUS =================
 def hapus_akun():
     if not var.akun:
-        print("\nTidak ada akun.\n")
+        print("\n! Tidak ada akun !\n")
         return
 
     pilihan = qs.select(
@@ -113,11 +113,11 @@ def hapus_akun():
     idAkun = int(pilihan.split(".")[0])
 
     if var.akun[idAkun]["hak"] == "admin":
-        print("\nAkun admin utama tidak boleh dihapus!\n")
+        print("\n!! Akun admin utama tidak boleh dihapus !!\n")
         return
 
     konfirmasi = qs.confirm(f"Yakin hapus akun '{var.akun[idAkun]['username']}'?").ask()
 
     if konfirmasi:
         del var.akun[idAkun]
-        print("\nAkun berhasil dihapus!\n")
+        print("\n! Akun berhasil dihapus !\n")

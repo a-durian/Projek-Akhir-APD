@@ -8,8 +8,6 @@ def update_barang():
     if not var.daftar_barang:
         print("\n ! Belum ada barang untuk diupdate !\n")
         return
-
-    print(f"\n{'=== Daftar Barang ===':^50}\n")
     listProduk()
     nama = qs.text("Masukkan nama barang yang ingin diupdate:").ask()
 
@@ -20,7 +18,7 @@ def update_barang():
             ).ask()
 
             if not konfirmasi:
-                print("Update dibatalkan.")
+                print("\n! Update dibatalkan !\n")
                 return
 
             nama_baru = qs.text("Nama baru (kosongkan jika tidak diubah):").ask()
