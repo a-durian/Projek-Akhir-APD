@@ -36,14 +36,14 @@ def status(username):
                 var.history_pesanan[username][
                     len(var.history_pesanan[username]) + 1
                 ] = deepcopy(salinan_riwayat[username][no])
-                # hapus riwayat yang sudah sampai
-                key_akhir = len(salinan_riwayat)
+                # hapus riwayat yang sudah sampai (geser entry setelahnya ke posisi sekarang)
+                key_akhir = len(salinan_riwayat[username])
                 for key in range(no, key_akhir):
                     if key < key_akhir:
-                        salinan_riwayat[username][no] = salinan_riwayat[username][
-                            no + 1
+                        salinan_riwayat[username][key] = salinan_riwayat[username][
+                            key + 1
                         ]
-                del salinan_riwayat[username][no]
+                del salinan_riwayat[username][key_akhir]
 
                 # menambah data barang yang telah sampai ke data pemasukan
                 for id, pesanan in enumerate(
@@ -66,11 +66,9 @@ def status(username):
                     )
 
             else:
-                print(
-                    f"Barang Pesanan Mu Belum Sampai, Estimasi : ",
-                    end="",
-                )
-                print(Fore.YELLOW + f"{i["waktu_estimasi"]} \n")
+                print(f"Barang Pesanan Mu Belum Sampai, Estimasi : ", end="")
+                # gunakan single quotes di dalam f-string untuk menghindari konflik kutip
+                print(Fore.YELLOW + f"{i['waktu_estimasi']} \n")
         var.riwayat_transaksi[username] = deepcopy(salinan_riwayat[username])
 
     else:
