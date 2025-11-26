@@ -27,10 +27,14 @@ def update_barang():
             if nama_baru == "" and harga_baru == "" and stok_baru == "":
                 print("\n ! Tidak ada perubahan yang dilakukan. !\n")
                 return
-            barang["nama"] = nama_baru or barang["nama"]
-            barang["harga"] = int(harga_baru) or barang["harga"]
-            barang["stock"] = int(stok_baru) or barang["stock"]
-            print("\n+ Barang berhasil diperbarui! \n")
-            return
+            try:
+                barang["nama"] = nama_baru or barang["nama"]
+                barang["harga"] = int(harga_baru) or barang["harga"]
+                barang["stock"] = int(stok_baru) or barang["stock"]
+                print("\n+ Barang berhasil diperbarui! \n")
+                return
+            except ValueError:
+                print("Input Tidak Valid")
+                return
 
     print("\n ! Barang tidak ditemukan. !\n")

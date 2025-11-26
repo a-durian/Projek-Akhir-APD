@@ -30,7 +30,9 @@ if __name__ == "__main__":
             case "user":
                 while True:
                     if var.diskon > 0:
-                        print(f"Hari ini terdapat diskon sebesar: {int(var.diskon*100)}%!\n")
+                        print(
+                            f"Hari ini terdapat diskon sebesar: {int(var.diskon*100)}%!\n"
+                        )
                     pilihan = qs.select(
                         f"Halo {username} Selamat Datang Di KlikCode Grosir. Silahkan pilih menu: ",
                         [
