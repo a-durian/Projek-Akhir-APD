@@ -16,8 +16,8 @@ def hapusProduk():
                 salinan_daftar_barang[batas] = salinan_daftar_barang[batas + 1]
                 continue
         del salinan_daftar_barang[key_akhir]
-        print("Hapus Barang Berhasil")
+        print("\n+ Hapus Barang Berhasil!\n")
         var.daftar_barang = deepcopy(salinan_daftar_barang)
     else:
-        print("Pilihan Tidak Valid")
+        print("\n!! Pilihan Tidak Valid !!\n")
         return

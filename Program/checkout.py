@@ -4,12 +4,10 @@ import random, sys, questionary as qs
 from copy import deepcopy
 import variabel_global as var
 from fungsi import clear_terminal
-from tambah_ke_keranjang import Tambah_Barang_ke_Keranjang
 from colorama import init, Fore, Style
+from lihat_daftar_barang import listProduk
 
-init(autoreset=True)
-# Untuk menghindari overwrite data lama terhadap data baru, import variabel_global, jangan pakai from variabel_global karena hanya akan menjadi referensi bukan merujuk ke variabel asli
-
+init(autoreset=True)# >>Untuk menghindari overwrite data lama terhadap data baru, import variabel_global, jangan pakai from variabel_global karena hanya akan menjadi referensi bukan merujuk ke variabel asli
 
 def menu_Keranjang(username):
     pilihan = qs.select(
@@ -39,26 +37,17 @@ def menu_Keranjang(username):
         case "Kembali ke Menu Utama User":
             sys.exit()
 
-
 def daftar_Keranjang_Belanja(username):
-    # deklarasi tabel_keranjang sebagai objek PrettyTable
-    tabel_keranjang = PrettyTable()
-    tabel_keranjang.set_style(TableStyle.SINGLE_BORDER)
-    tabel_keranjang.field_names = ["No", "Nama Produk", "Jumlah", "Subtotal"]
-    print("")
-    tabel_keranjang.align["Nama Produk"] = "l"
-    tabel_keranjang.align["Harga"] = "l"
-    tabel_keranjang.align["Subtotal"] = "l"
-    # import shared data lazily
-
-    if not var.keranjang_belanja:
-        print("Keranjang belanja kosong.")
-        # kembaliKeMenu(menuCustomer)
-        # #setelah ini seharusnya akan kembali ke menu user
-    else:
+    if var.keranjang_belanja[username]:
+        tabel_keranjang = PrettyTable() # deklarasi tabel_keranjang sebagai objek PrettyTable
+        tabel_keranjang.set_style(TableStyle.SINGLE_BORDER)
+        tabel_keranjang.field_names = ["No", "Nama Produk", "Jumlah", "Subtotal"]
+        print("")
+        tabel_keranjang.align["Nama Produk"] = "l"
+        tabel_keranjang.align["Harga"] = "l"
+        tabel_keranjang.align["Subtotal"] = "l"
         total = 0
         for id, barang in enumerate(var.keranjang_belanja[username].values(), start=1):
-            print(barang)
             nama = barang["nama"]
             harga = barang["harga"]
             jumlah = barang["jumlah"]
@@ -69,20 +58,13 @@ def daftar_Keranjang_Belanja(username):
         tabel_keranjang.add_row(["", "", "Total:", f"Rp.{total:,}".replace(",", ".")])
         print(tabel_keranjang)
         # kembali  ke menu keranjang belanja
-
+    else:
+        print("\n!! Belum Ada Produk Di Keranjang Belanja !!\n")
+        # kembali ke menu sebelumnya
 
 def Lanjut_Pembayaran(username):
-    # kalau tidak ada produk di keranjang belanja
-    # import shared state lazily
-    daftar_Keranjang_Belanja(username)
     if var.keranjang_belanja[username]:
-        try:
-            not var.keranjang_belanja[username]
-        except ValueError:
-            print("Keranjang belanja kosong.")
-            # kembaliKeMenu(menuCustomer)
-            pass
-
+        daftar_Keranjang_Belanja(username)
         opsi_lanjut = qs.confirm("Apakah Anda ingin melakukan pembayaran?").ask()
         if opsi_lanjut == True:
             print(
@@ -105,8 +87,75 @@ def Lanjut_Pembayaran(username):
             print("\n!! Tolong ikuti instruksi yang tersedia. Silahkan coba lagi. !!\n")
             return Lanjut_Pembayaran(username)
     else:
-        print("Belum Ada Produk Di Keranjang Belanja")
+        print("\n!! Belum Ada Produk Di Keranjang Belanja !!\n")
 
+def Tambah_Barang_ke_Keranjang(username):
+    if var.daftar_barang:
+        listProduk()
+        menu_grosir_input = qs.text(
+            "Masukkan [0] untuk kembali ke menu awal\n  Silahkan pilih nomor produk untuk dimasukkan ke keranjang belanja: "
+        ).ask()
+        if menu_grosir_input.isdigit():
+            menu_grosir = int(menu_grosir_input)
+            if menu_grosir == 0:
+                print("\nKembali ke menu awal...\n")
+                pass
+            elif menu_grosir in var.daftar_barang:
+                jumlah_input = qs.text("Selanjutnya masukkan jumlah [1/2/...]: ").ask()
+                if jumlah_input == "":
+                    jumlah = 1
+                elif (
+                    jumlah_input.isdigit()
+                    and int(jumlah_input) > 0
+                    and not (
+                        var.daftar_barang[menu_grosir]["stock"] - int(jumlah_input)
+                    )
+                    < 0
+                ):
+                    jumlah = int(jumlah_input)
+                else:
+                    print("\n!! Jumlah tidak valid. Silahkan coba lagi.!!\n")
+                    Tambah_Barang_ke_Keranjang(username)
+                var.keranjang_belanja[username][
+                    len(var.keranjang_belanja[username]) + 1
+                ] = {
+                    "nama": var.daftar_barang[menu_grosir]["nama"],
+                    "harga": var.daftar_barang[menu_grosir]["harga"]
+                    - (var.daftar_barang[menu_grosir]["harga"] * var.diskon),
+                    "jumlah": jumlah,
+                }
+
+                nama = var.daftar_barang[menu_grosir]["nama"]
+                harga = var.daftar_barang[menu_grosir]["harga"]
+                var.daftar_barang[menu_grosir]["stock"] -= jumlah
+                # menghapus barang yang stock nya sudah habis dari daftar_barang
+                key_akhir = len(var.daftar_barang.keys())
+                salinan_daftar_barang = deepcopy(var.daftar_barang)
+                for id, info_barang in var.daftar_barang.items():
+                    if info_barang["stock"] == 0:
+                        for i in range(id, key_akhir):
+                            salinan_daftar_barang[i] = deepcopy(
+                                salinan_daftar_barang[i + 1]
+                            )
+                        del salinan_daftar_barang[key_akhir]
+                var.daftar_barang = deepcopy(salinan_daftar_barang)
+
+                print(
+                    f"\n+ {nama} x{jumlah} seharga Rp.{harga:,} berhasil ditambahkan ke keranjang belanja.\n"
+                )
+                # ^^ disini harusnya ada output nanya ntuk coba lagi...
+                pass
+            else:
+                print("\n!! Produk tidak ditemukan. Silahkan coba lagi. !!\n")
+                Tambah_Barang_ke_Keranjang(username)
+        else:
+            print("\n!! Input harus berupa nomor. Silahkan coba lagi. !!\n")
+            Tambah_Barang_ke_Keranjang(username)
+    else:
+        print("\n! Belum Ada Produk !\n")
+
+if __name__ == "__main__":
+    pass
 
 def hapus_Produk_Keranjang(username):
     if var.keranjang_belanja[username]:
@@ -127,7 +176,8 @@ def hapus_Produk_Keranjang(username):
                 salinan_keranjang_belanja[username]
             )
         else:
-            print("Input Tidak Valid")
+            print("\n!! Input Tidak Valid. Silahkan coba lagi. !!\n")
+            hapus_Produk_Keranjang(username)
     else:
-        print("Keranjang Belanja Mu Masih Kosong")
+        print("\n ! Keranjang Belanja Mu Masih Kosong !\n")
         return

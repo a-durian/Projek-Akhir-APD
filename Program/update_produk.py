@@ -6,10 +6,8 @@ import variabel_global as var
 def update_barang():
 
     if not var.daftar_barang:
-        print("Belum ada barang untuk diupdate.")
+        print("\n ! Belum ada barang untuk diupdate !\n")
         return
-
-    print("\n=== Daftar Barang ===")
     listProduk()
     nama = qs.text("Masukkan nama barang yang ingin diupdate:").ask()
 
@@ -20,17 +18,19 @@ def update_barang():
             ).ask()
 
             if not konfirmasi:
-                print("Update dibatalkan.")
+                print("\n! Update dibatalkan !\n")
                 return
 
             nama_baru = qs.text("Nama baru (kosongkan jika tidak diubah):").ask()
             harga_baru = qs.text("Harga baru (kosongkan jika tidak diubah):").ask()
             stok_baru = qs.text("Stok baru (kosongkan jika tidak diubah):").ask()
-
+            if nama_baru == "" and harga_baru == "" and stok_baru == "":
+                print("\n ! Tidak ada perubahan yang dilakukan. !\n")
+                return
             barang["nama"] = nama_baru or barang["nama"]
             barang["harga"] = int(harga_baru) or barang["harga"]
             barang["stock"] = int(stok_baru) or barang["stock"]
-            print("Barang berhasil diperbarui!")
+            print("\n+ Barang berhasil diperbarui! \n")
             return
 
-    print("Barang tidak ditemukan.")
+    print("\n ! Barang tidak ditemukan. !\n")

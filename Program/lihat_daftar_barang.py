@@ -4,6 +4,7 @@ import variabel_global as var
 
 # ///Tampilkan daftar produk dari dictionary `Produk`.///
 def listProduk():
+    print(f"\n{'=== Daftar Barang ===':^60}")
     if var.daftar_barang:
         tabel = PrettyTable()
         tabel.set_style(TableStyle.SINGLE_BORDER)
@@ -22,5 +23,5 @@ def listProduk():
             )
         print(tabel)
     else:
-        print("Belum Ada Produk")
+        print("\n! Belum Ada Produk !\n")
         return

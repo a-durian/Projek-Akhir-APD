@@ -15,16 +15,16 @@ def register():
                 password = qs.password("Input Password : ").ask()
                 if password == "" or username == "":
                     clear_terminal()
-                    print("Password atau Username Tidak Boleh Kosong")
+                    print("\n!! Password atau Username Tidak Boleh Kosong !!\n")
                     continue
                 username_akun = [i["username"] for i in var.akun.values()]
                 if username in username_akun:
                     clear_terminal()
-                    print("Username Telah Digunakan")
+                    print("\n!! Username Telah Digunakan !!\n")
                     continue
                 elif not (username in username_akun):
                     if len(password) < 8:
-                        print("Password Minimal 8 Karakter")
+                        print("\n!! Password Minimal 8 Karakter !!\n")
                         continue
 
                     banyak_akun = len(var.akun.values()) + 1
@@ -36,7 +36,7 @@ def register():
                     var.keranjang_belanja[username] = {}
                     var.riwayat_transaksi[username] = {}
                     var.history_pesanan[username] = {}
-                    print("Akun Berhasil Di Buat")
+                    print("\nAkun Berhasil Di Buat!\n")
                     continue
 
             case "Login":
@@ -46,9 +46,9 @@ def register():
                     if username == akun["username"] and password == akun["password"]:
                         return {"username": akun["username"], "hak": akun["hak"]}
                     elif username == akun["username"] and password != akun["password"]:
-                        print("Password Salah")
+                        print("\n!! Password Salah !!\n")
                         return {"username": 0, "hak": 0}
-                print("Akun Tidak Di Temukan")
+                print("\n!! Akun Tidak Di Temukan !! \n")
                 return {"username": 0, "hak": 0}
 
             case "Keluar":

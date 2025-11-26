@@ -30,9 +30,9 @@ if __name__ == "__main__":
             case "user":
                 while True:
                     if var.diskon > 0:
-                        print(f"Hari Ini DISKONNN {int(var.diskon*100)}%")
+                        print(f"Hari ini terdapat diskon sebesar: {int(var.diskon*100)}%!\n")
                     pilihan = qs.select(
-                        f"Halo {username} Selamat Datang Di Toko Kami '-' ",
+                        f"Halo {username} Selamat Datang Di KlikCode Grosir. Silahkan pilih menu: ",
                         [
                             "Keranjang Belanja",
                             "Status Pesanan",
@@ -59,7 +59,7 @@ if __name__ == "__main__":
             case "admin":
                 while True:
                     pilihan = qs.select(
-                        "Selamat Datang Admin '-'",
+                        "Selamat Datang Admin. Silahkan pilih menu: ",
                         [
                             "Tambah Daftar Barang",
                             "Tampilkan Daftar Barang",
