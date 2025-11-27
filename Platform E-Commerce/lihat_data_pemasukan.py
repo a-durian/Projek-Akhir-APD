@@ -6,21 +6,6 @@ import matplotlib.pyplot as plt
 
 def list_data_pemasukan():
     try:
-        df = pd.read_csv("data_pemasukan.csv")
-        df["Tanggal"] = pd.to_datetime(df["Tanggal"])
-        df["Total"] = df["Harga"] + df["Jumlah"]
-        df_per_hari = df.groupby(df["Tanggal"].dt.date)["Total"].sum()
-        x = df_per_hari.index
-        y = df_per_hari.values
-        plt.figure(figsize=(10, 5))
-        plt.plot(x, y, marker="o")
-        plt.xlabel("Tanggal")
-        plt.ylabel("Total Pemasukan")
-        plt.title("Total Pemasukan Per Hari")
-        plt.grid(True)
-        plt.xticks(rotation=45)
-        plt.tight_layout()
-        plt.show()
 
         with open("data_pemasukan.csv", mode="r") as file:
             reader = csv.reader(file)
@@ -38,6 +23,22 @@ def list_data_pemasukan():
 
             print("\n=== Daftar Data Pemasukan ===")
             print(table)
+
+        df = pd.read_csv("data_pemasukan.csv")
+        df["Tanggal"] = pd.to_datetime(df["Tanggal"])
+        df["Total"] = df["Harga"] + df["Jumlah"]
+        df_per_hari = df.groupby(df["Tanggal"].dt.date)["Total"].sum()
+        x = df_per_hari.index
+        y = df_per_hari.values
+        plt.figure(figsize=(10, 5))
+        plt.plot(x, y, marker="o")
+        plt.xlabel("Tanggal")
+        plt.ylabel("Total Pemasukan")
+        plt.title("Total Pemasukan Per Hari")
+        plt.grid(True)
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.show()
+
     except KeyError:
         print("\n! Belum ada data pemasukan !\n")
-
