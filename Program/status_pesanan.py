@@ -14,12 +14,12 @@ def status(username):
         # Tampilkan Status Pesanan
         print("Berikut Daftar Status Pesanan Mu")
         salinan_riwayat = deepcopy(var.riwayat_transaksi)
-        for no, i in var.riwayat_transaksi[username].items():
+        for no, info in var.riwayat_transaksi[username].items():
             tabel_status = PrettyTable()
             total = 0
             tabel_status.set_style(TableStyle.SINGLE_BORDER)
             tabel_status.field_names = ["No", "Nama Produk", "Jumlah", "Harga"]
-            for id, barang in enumerate(i["barang"].values(), start=1):
+            for id, barang in enumerate(info["barang"].values(), start=1):
                 tabel_status.add_row(
                     [id, barang["nama"], barang["jumlah"], f"Rp.{barang['harga']:,}"]
                 )
@@ -29,13 +29,13 @@ def status(username):
             print(tabel_status)
 
             # cek pengiriman sudah sampai atau belum
-            if i["waktu_estimasi"] <= datetime.now():
+            if info["waktu_estimasi"] <= datetime.now():
                 # barang sudah sampai akan  di hapus dari status Pesanan
                 print("Barang Pesanan Mu Sudah Sampai \n")
                 # lakukan salinan riwayat yang sudah sampai ke history
                 var.history_pesanan[username][
                     len(var.history_pesanan[username]) + 1
-                ] = deepcopy(salinan_riwayat[username][no])
+                ] = deepcopy(info)
                 # hapus riwayat yang sudah sampai (geser entry setelahnya ke posisi sekarang)
                 key_akhir = len(salinan_riwayat[username])
                 for key in range(no, key_akhir):
@@ -58,7 +58,7 @@ def status(username):
                             ],
                             "Nama Barang": [barang["nama"]],
                             "Jumlah": [barang["jumlah"]],
-                            "Harga": [f"Rp.{barang['harga']:,}"],
+                            "Harga": [barang["harga"]],
                         }
                     df_baru = pd.DataFrame(data_baru)
                     df_baru.to_csv(
@@ -68,7 +68,7 @@ def status(username):
             else:
                 print(f"Barang Pesanan Mu Belum Sampai, Estimasi : ", end="")
                 # gunakan single quotes di dalam f-string untuk menghindari konflik kutip
-                print(Fore.YELLOW + f"{i['waktu_estimasi']} \n")
+                print(Fore.YELLOW + f"{info['waktu_estimasi']} \n")
         var.riwayat_transaksi[username] = deepcopy(salinan_riwayat[username])
 
     else:
