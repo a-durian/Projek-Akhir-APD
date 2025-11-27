@@ -41,7 +41,7 @@ def register():
 
             case "Login":
                 username = qs.text("Input Username : ").ask()
-                password = qs.text("Input Password : ").ask()
+                password = qs.password("Input Password : ").ask()
                 for id, akun in var.akun.items():
                     if username == akun["username"] and password == akun["password"]:
                         return {"username": akun["username"], "hak": akun["hak"]}
