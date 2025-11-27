@@ -57,8 +57,8 @@ def status(username):
                                 )
                             ],
                             "Nama Barang": [barang["nama"]],
-                            "Jumlah": [barang["jumlah"]],
                             "Harga": [barang["harga"]],
+                            "Jumlah": [barang["jumlah"]],
                         }
                     df_baru = pd.DataFrame(data_baru)
                     df_baru.to_csv(
