@@ -40,3 +40,4 @@ def list_data_pemasukan():
             print(table)
     except KeyError:
         print("\n! Belum ada data pemasukan !\n")
+
